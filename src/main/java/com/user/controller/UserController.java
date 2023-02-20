@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import com.user.entity.User;
 import com.user.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 	@Autowired
 	private UserService userService;
@@ -28,10 +29,10 @@ public class UserController {
 	public ResponseEntity<?> createUser(@RequestBody User user) {
 
 		User saveUser = userService.saveUser(user);
-		return ResponseEntity.status(HttpStatus.OK).body(saveUser);
+		return ResponseEntity.status(HttpStatus.CREATED).body(saveUser);
 	}
 
-	@GetMapping("/getAll")
+	@GetMapping(value = "/allUser",produces = MediaType.APPLICATION_ATOM_XML_VALUE)
 	public ResponseEntity<List<User>> findAllUser() {
 
 		List<User> alluser = userService.getAlluser();
@@ -41,14 +42,14 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> UserById(@RequestParam  String id) {
+	public ResponseEntity<User> UserById(@PathVariable  String id) {
 
 		User userById = userService.getUserById(id);
 
 		return ResponseEntity.status(HttpStatus.OK).body(userById);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}" )
 	public void deleteUser(@PathVariable String id) {
 
 		userService.deleteUser(id);
